@@ -1,0 +1,24 @@
+type GlossaryItem {
+    name: String!
+    description: String!
+    link: String
+}
+
+input GlossaryItemInput {
+    name: String!
+    description: String!
+    link: String
+}
+
+enum SortOrder {
+    ASC
+    DESC
+}
+
+type Query {
+    getGlossaryItems(limit: Int, offset: Int, sort: SortOrder): [GlossaryItem]
+}
+
+type Mutation {
+    upsertGlossaryItem(item: GlossaryItemInput!): GlossaryItem
+}
