@@ -14,5 +14,5 @@ spring:
       enabled: true
 
 glossary:
-  path-to-init-data: ./data/init.csv
+  path-to-init-data: ./data/init-glossary.csv
   init-data-separator: ;
