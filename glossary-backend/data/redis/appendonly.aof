@@ -148,3 +148,17 @@ $7
 Test!!!
 $28
 {"description":"","link":""}
+*2
+$6
+SELECT
+$1
+0
+*4
+$4
+HSET
+$8
+glossary
+$6
+445464
+$41
+{"description":"123213","link":"1233122"}

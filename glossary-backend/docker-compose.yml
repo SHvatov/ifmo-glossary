@@ -11,11 +11,11 @@ services:
       - "6379:6379"
       - "8001:8001"
 
-  glossary:
+  glossary-backend:
     build:
       context: .
       dockerfile: Dockerfile
-    image: glossary:latest
+    image: glossary-backend:latest
     environment:
       - SPRING_REDIS_HOST=redis
     volumes:
@@ -23,4 +23,15 @@ services:
     depends_on:
       - redis
     ports:
-      - "8080:8080"
+      - "8081:8081"
+
+  glossary-frontend:
+    build:
+      context: ../glossary-frontend
+      dockerfile: Dockerfile
+    image: glossary-frontend:latest
+    depends_on:
+      - glossary-backend
+    ports:
+      - "80:80"
+

@@ -192,7 +192,7 @@ export default {
 
       console.log(getGlossaryItemsQuery);
 
-      fetch("http://localhost:8080/graphql", {
+      fetch("http://localhost:8081/graphql", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -203,6 +203,8 @@ export default {
         .then((r) => r.json())
         .then((data) => {
           this.items = data.data.getGlossaryItems;
+
+          // @ts-ignore
           this.$refs.glossary_table.refresh();
         });
     },
@@ -231,7 +233,7 @@ export default {
 
       console.log(upsertGlossaryItemQuery);
 
-      fetch("http://localhost:8080/graphql", {
+      fetch("http://localhost:8081/graphql", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
