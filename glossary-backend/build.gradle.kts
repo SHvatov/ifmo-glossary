@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.shvatov"
-version = "0.0.3-SNAPSHOT"
+version = "0.0.4-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {

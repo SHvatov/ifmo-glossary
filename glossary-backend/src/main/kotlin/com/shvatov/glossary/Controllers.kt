@@ -17,8 +17,17 @@ class GlossaryController(private val repository: GlossaryItemRepository) {
     fun getGlossaryItems(
         @Argument limit: Long?,
         @Argument offset: Long?,
-        @Argument sort: SortOrder?
+        @Argument sort: SortOrder?,
+        @Argument nameFilter: String?
     ) = repository.findAll()
+        .filter { item ->
+            nameFilter?.let { substring ->
+                item.name
+                    ?.lowercase()
+                    ?.contains(substring.lowercase())
+                    ?: false
+            } ?: true
+        }
         .let { flux ->
             if (sort != null) {
                 flux.sort(

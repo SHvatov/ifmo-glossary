@@ -1,15 +1,12 @@
 <script setup lang="ts">
-
+import Glossary from "./components/Glossary.vue";
 </script>
 
 <template>
   <main>
-    <div>
-      Hello World!
-    </div>
+    <Glossary />
   </main>
 </template>
 
 <style scoped>
-
 </style>

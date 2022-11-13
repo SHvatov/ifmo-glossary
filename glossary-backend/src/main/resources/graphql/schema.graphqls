@@ -16,7 +16,7 @@ enum SortOrder {
 }
 
 type Query {
-    getGlossaryItems(limit: Int, offset: Int, sort: SortOrder): [GlossaryItem]
+    getGlossaryItems(limit: Int, offset: Int, sort: SortOrder, nameFilter: String): [GlossaryItem]
 }
 
 type Mutation {
