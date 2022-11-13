@@ -1,5 +1,13 @@
 <template>
   <b-container fluid id="glossary-container">
+    <b-container style="margin-bottom: 2%; padding: 0">
+      <b-row>
+        <h1>Термины дипломной работы</h1>
+      </b-row>
+      <b-row>
+        <h5>Выполнил студент группы P41081 Хватов Сергей</h5>
+      </b-row>
+    </b-container>
     <b-row>
       <b-col lg="8">
         <b>
@@ -58,6 +66,73 @@
       <b-col lg="3">
         <b-button @click="loadGlossary()"> Применить фильтры </b-button>
       </b-col>
+
+      <b-col lg="3">
+        <b-button v-b-modal.glossary-modal>Добавить новый термин</b-button>
+
+        <b-modal
+          id="glossary-modal"
+          size="lg"
+          title="Новый термин"
+          ok-only
+          ok-title="Добавить"
+          @ok="createGlossaryItem()"
+        >
+          <b-form-group
+            label="Наименование"
+            label-for="item-name-input"
+            label-cols-sm="3"
+            label-align-sm="right"
+            label-size="sm"
+            class="lg"
+          >
+            <b-input-group size="sm">
+              <b-form-input
+                id="item-name-input"
+                type="text"
+                v-model="templateGlossaryItemName"
+              >
+              </b-form-input>
+            </b-input-group>
+          </b-form-group>
+
+          <b-form-group
+            label="Описание"
+            label-for="item-descr-input"
+            label-cols-sm="3"
+            label-align-sm="right"
+            label-size="sm"
+            class="lg"
+          >
+            <b-input-group size="sm">
+              <b-form-input
+                id="item-descr-input"
+                type="text"
+                v-model="templateGlossaryItemDescription"
+              >
+              </b-form-input>
+            </b-input-group>
+          </b-form-group>
+
+          <b-form-group
+            label="Источник"
+            label-for="item-link-input"
+            label-cols-sm="3"
+            label-align-sm="right"
+            label-size="sm"
+            class="lg"
+          >
+            <b-input-group size="sm">
+              <b-form-input
+                id="item-link-input"
+                type="url"
+                v-model="templateGlossaryItemLink"
+              >
+              </b-form-input>
+            </b-input-group>
+          </b-form-group>
+        </b-modal>
+      </b-col>
     </b-row>
 
     <b-table
@@ -70,7 +145,9 @@
       id="glossary-table"
     >
       <template #cell(link)="link">
-        <a href="#" @click="redirectToSource(link.value)">Ссылка на источник</a>
+        <a href="#" @click="redirectToSource(link.value)" style="color: black"
+          >Ссылка на источник</a
+        >
       </template>
     </b-table>
   </b-container>
@@ -84,6 +161,9 @@ export default {
     return {
       sortOrder: "ASC",
       filter: "",
+      templateGlossaryItemName: "",
+      templateGlossaryItemDescription: "",
+      templateGlossaryItemLink: "",
       fields: [
         {
           key: "name",
@@ -134,6 +214,43 @@ export default {
     redirectToSource(link: string) {
       console.log(link);
       window.location.href = link;
+    },
+    createGlossaryItem() {
+      if (!this.templateGlossaryItemName) {
+        alert("Необходимо ввести наименование термина!");
+        return;
+      }
+
+      let upsertGlossaryItemQuery = `mutation {
+          upsertGlossaryItem(item: {
+              name: "${this.templateGlossaryItemName}",
+              description: "${this.templateGlossaryItemDescription}",
+              link: "${this.templateGlossaryItemLink}"
+          }) { name }
+        }`;
+
+      console.log(upsertGlossaryItemQuery);
+
+      fetch("http://localhost:8080/graphql", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ query: upsertGlossaryItemQuery }),
+      })
+        .then((r) => r.json())
+        .then((_) => {
+          this.templateGlossaryItemName = "";
+          this.templateGlossaryItemLink = "";
+          this.templateGlossaryItemDescription = "";
+
+          this.loadGlossary();
+        });
+
+      $(
+        "#glossary-modal > .modal-dialog > .modal-content > .modal-header > .btn-close"
+      ).click();
     },
   },
 };
